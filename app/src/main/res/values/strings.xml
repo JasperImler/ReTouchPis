@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ReTouchPis</string>
+    <string name="translabel"> </string>
+    <string name="puton">+   导入</string>
+</resources>
