@@ -9,13 +9,21 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
-        android:layout_width="408dp"
-        android:layout_height="596dp"
+        android:layout_width="406dp"
+        android:layout_height="526dp"
         android:background="#1E1D1D"
         android:fitsSystemWindows="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="107dp"
+            android:layout_height="63dp"
+            android:layout_gravity="bottom|center_vertical"
+            android:max="100"
+            android:visibility="gone" />
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -28,56 +36,29 @@
 
         <ImageView
             android:id="@+id/retouchingphoto"
-            android:layout_width="410dp"
-            android:layout_height="538dp"
+            android:layout_width="match_parent"
+            android:layout_height="526dp"
             android:fitsSystemWindows="true"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
             tools:ignore="ContentDescription" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="107dp"
-            android:layout_height="63dp"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:max="100"
-            android:visibility="gone"
-            />
-
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="408dp"
-        android:layout_height="190dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="432dp"
+        android:layout_height="135dp"
         android:background="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints">
-
-<!--        <FrameLayout-->
-<!--            android:layout_width="423dp"-->
-<!--            android:layout_height="54dp"-->
-<!--            android:id="@+id/seekbarLayout"-->
-<!--            android:layout_gravity="top|center_horizontal">-->
-
-<!--            <SeekBar-->
-<!--                android:id="@+id/seekBar"-->
-<!--                android:layout_width="258dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:max="255"-->
-<!--                android:min="127"-->
-<!--                android:visibility="invisible"-->
-
-<!--                />-->
-<!--        </FrameLayout>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/toolList"
@@ -87,6 +68,19 @@
             tools:ignore="MissingConstraints" />
 
     </LinearLayout>
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="166dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="119dp"
+        android:visibility="invisible"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="126dp"
+        android:max="255"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

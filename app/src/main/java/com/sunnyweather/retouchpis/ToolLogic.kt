@@ -1,21 +1,20 @@
 package com.sunnyweather.retouchpis
 
-import android.app.Dialog
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
-import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.core.view.drawToBitmap
-import androidx.recyclerview.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.sunnyweather.retouchpis.ReTouchTool.Tooladapter
+import com.sunnyweather.retouchpis.databinding.ActivityRetouchingBinding
 
-class ToolLogic(val holder: Tooladapter.ViewHolder,val retouchingphoto:ImageView,var lastProgress:Float) {
+class ToolLogic(val holder: Tooladapter.ViewHolder,val retouchingphoto:ImageView,var lastProgress:Float,var rootView:View) {
+    private val inflater: LayoutInflater =  MyApplication.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     lateinit var imageView:ImageView
     lateinit var bitmap:Bitmap
 
@@ -34,31 +33,35 @@ class ToolLogic(val holder: Tooladapter.ViewHolder,val retouchingphoto:ImageView
     }
     private fun LogicImplement()
     {
-//
-//        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-//                var value :Float = progress.toFloat() / 127
-//
-//                when(holder.ToolName.text.toString())
-//                {
-//                    "亮度" -> brightness = value
-//                    "对比度" -> contrast = value
-//                    "颗粒" -> noise = value
-//                }
-//
-//                imageView.setImageBitmap(imageHelper.handleImage(bitmap,brightness))
-//
-//            }
-//
-//            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-////                Toast.makeText(context,"LastProgress  is ${lastProgress} when begining Tracking",Toast.LENGTH_SHORT).show()
-//            }
-//
-//            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-//                Toast.makeText(MyApplication.context,"lastProgress has been saved",Toast.LENGTH_SHORT).show()
-//                lastProgress = seekBar?.progress?.toFloat() ?: 0F
-//            }
-//        })
+        val view = inflater.inflate(R.layout.activity_retouching, null)
+        val seekBar = view.findViewById<SeekBar>(R.id.seekBar)
+        seekBar.progress = lastProgress.toInt()
+        seekBar.max = 255
+        seekBar.visibility = View.VISIBLE
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                var value :Float = progress.toFloat() / 127
+
+                when(holder.ToolName.text.toString())
+                {
+                    "亮度" -> brightness = value
+                    "对比度" -> contrast = value
+                    "颗粒" -> noise = value
+                }
+
+                imageView.setImageBitmap(imageHelper.handleImage(bitmap,brightness))
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                Toast.makeText(MyApplication.context,"开始滑动",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                Toast.makeText(MyApplication.context,"停止滑动",Toast.LENGTH_SHORT).show()
+                lastProgress = seekBar?.progress?.toFloat() ?: 0F
+            }
+        })
 //
 
     }

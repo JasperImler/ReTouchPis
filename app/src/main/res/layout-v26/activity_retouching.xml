@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="596dp"
             android:fitsSystemWindows="true"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/linearLayout"
         android:layout_width="410dp"
         android:layout_height="137dp"
         android:background="#000000"
@@ -60,20 +60,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints">
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|center_horizontal"
-            >
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:max="255"
-                android:min="127"
-                android:layout_width="166dp"
-                android:layout_height="22dp"
-                android:layout_marginBottom="44dp"
-                />
-        </FrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/toolList"
             android:layout_width="wrap_content"

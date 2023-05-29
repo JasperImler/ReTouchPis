@@ -30,12 +30,12 @@ class Tooladapter(val toolList:List<Tool>,val retouchingphoto:ImageView):Recycle
             val curClickPosition = holder.bindingAdapterPosition//获取当前位置
            if(lastClickPosition!=curClickPosition) //当前位置与上一次点击位置不一致
             {
-                val toolLogic = ToolLogic(holder,retouchingphoto,0F)//获取实例
+                val toolLogic = ToolLogic(holder,retouchingphoto,0F,view)//获取实例
                 toolLogic.ChangeState()//首先更改当前点击颜色
 
 
                 val lastHolder = re.findViewHolderForAdapterPosition(lastClickPosition) as Tooladapter.ViewHolder
-                val lastToolLogic = ToolLogic(lastHolder,retouchingphoto,lastProgress)//获取上一个的实例
+                val lastToolLogic = ToolLogic(lastHolder,retouchingphoto,lastProgress,view)//获取上一个的实例
                 lastToolLogic.ChangeBack()//改变回原来的颜色
 
                 //更新
@@ -46,7 +46,7 @@ class Tooladapter(val toolList:List<Tool>,val retouchingphoto:ImageView):Recycle
                 toolLogic.show()//开启当前功能实现
             }else //与上一次点击位置一致
             {
-                val toolLogic = ToolLogic(holder,retouchingphoto,lastProgress)//获取实例
+                val toolLogic = ToolLogic(holder,retouchingphoto,lastProgress,view)//获取实例
                 toolLogic.ChangeState()
 
                 lastClickPosition = holder.bindingAdapterPosition//更新点击位置
