@@ -116,10 +116,11 @@ class Retouching : AppCompatActivity() {
         }
 
         initToolList()
+
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         binding.toolList.layoutManager = layoutManager
-        val adapter = Tooladapter(ToolList,binding.retouchingphoto)
+        val adapter = Tooladapter(ToolList,binding.retouchingphoto,window.decorView.rootView)
         binding.toolList.adapter = adapter
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)

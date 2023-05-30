@@ -14,7 +14,6 @@ import com.sunnyweather.retouchpis.ReTouchTool.Tooladapter
 import com.sunnyweather.retouchpis.databinding.ActivityRetouchingBinding
 
 class ToolLogic(val holder: Tooladapter.ViewHolder,val retouchingphoto:ImageView,var lastProgress:Float,var rootView:View) {
-    private val inflater: LayoutInflater =  MyApplication.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     lateinit var imageView:ImageView
     lateinit var bitmap:Bitmap
 
@@ -33,10 +32,10 @@ class ToolLogic(val holder: Tooladapter.ViewHolder,val retouchingphoto:ImageView
     }
     private fun LogicImplement()
     {
+        val inflater = LayoutInflater.from(MyApplication.context)
         val view = inflater.inflate(R.layout.activity_retouching, null)
         val seekBar = view.findViewById<SeekBar>(R.id.seekBar)
         seekBar.progress = lastProgress.toInt()
-        seekBar.max = 255
         seekBar.visibility = View.VISIBLE
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
