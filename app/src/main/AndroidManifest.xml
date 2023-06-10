@@ -3,10 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
+        android:requestLegacyExternalStorage="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -17,7 +19,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.retouchpis.fileprovider"
+            android:authorities="com.sunnyweather.retouchpis.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -26,7 +28,7 @@
         </provider>
 
         <activity
-            android:name=".Retouching"
+            android:name=".EditImageActivity"
             android:exported="false"
             android:theme="@style/TouchingTheme" />
         <activity
