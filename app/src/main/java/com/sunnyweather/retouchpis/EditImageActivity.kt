@@ -11,7 +11,16 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.renderscript.Allocation
+import androidx.renderscript.RenderScript
+import androidx.renderscript.ScriptIntrinsicConvolve3x3
+import com.google.android.material.snackbar.Snackbar
 import com.sunnyweather.retouchpis.databinding.ActivityRetouchingBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class EditImageActivity : AppCompatActivity() {
@@ -32,6 +41,9 @@ class EditImageActivity : AppCompatActivity() {
     lateinit var seekBar_ruihua: SeekBar
     lateinit var imageView: ImageView
     lateinit var bitmap: Bitmap
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var originalBitmap: Bitmap
+    private lateinit var sharpenedBitmap: Bitmap
 
     companion object {
         const val REQUEST_WRITE_EXTERNAL_STORAGE_CODE = 1000
@@ -106,6 +118,12 @@ class EditImageActivity : AppCompatActivity() {
         }
         return true
     }
+
+    private fun Apply() {
+        bitmap = (imageView.drawable as BitmapDrawable).bitmap
+        imageView.setImageBitmap(bitmap);
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityRetouchingBinding.inflate(layoutInflater)
@@ -124,6 +142,17 @@ class EditImageActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         init()
+        binding.apply?.setOnClickListener{ view->
+            run {
+                Snackbar.make(view, "确认要应用吗？", Snackbar.LENGTH_SHORT)
+                    .setAction("确认！") {
+                        Apply()
+                        Toast.makeText(this, "应用成功！", Toast.LENGTH_SHORT).show()
+                    }.show()
+            }
+
+//            Toast.makeText(this,"FAB clicked",Toast.LENGTH_SHORT).show()
+        }
         val radioGroup = findViewById<RadioGroup>(R.id.layout_tab)
 
         radioGroup.setOnCheckedChangeListener { group, checkedId ->
@@ -197,29 +226,35 @@ class EditImageActivity : AppCompatActivity() {
     private fun showSeekbar(seekBar:SeekBar,label:String)
     {
 
-            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    val value = when (label) {
-                        "brightness", "saturation" -> progress.toFloat() / 127
-                        "Hue" -> (progress - 127) * 1.0F / 127 * 50
-                        "noise" -> progress.toFloat()
-                        "contrast" -> progress.toFloat()
-                        else->progress.toFloat()
-                    }
-                    runOnUiThread {
-                        imageView.setImageBitmap(imageHelper.handleImage(bitmap,value,label))
-                    }
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                handler.removeCallbacksAndMessages(null) // 移除之前的消息
+                val value = when (label) {
+                    "brightness", "saturation" -> progress.toFloat() / 127
+                    "Hue" -> (progress - 127) * 1.0F / 127 * 50
+                    "noise" -> progress.toFloat()
+                    "contrast" -> progress.toFloat()
+                    else->progress.toFloat()
                 }
+                handler.postDelayed({
+                    editImage(value,label,bitmap) // 延迟执行图片编辑操作
+                }, 100) // 延迟时间，单位为毫秒
 
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                }
+            }
 
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
 //                    Log.d("ReTouching","当前的值为${temp}")
-                    bitmap = (imageView.drawable as BitmapDrawable).bitmap
-                }
-            })
+//                bitmap = (imageView.drawable as BitmapDrawable).bitmap
+            }
+        })
 
+    }
+    private fun editImage(value:Float,label:String,bitmap:Bitmap) {
+        val editedImage = imageHelper.handleImage(bitmap,value,label)
+        imageView.setImageBitmap(editedImage)
     }
 
     private fun init()
@@ -241,9 +276,10 @@ class EditImageActivity : AppCompatActivity() {
         seekBar_Tou = findViewById(R.id.seekBar_tou)
         imageView = findViewById(R.id.retouchingphoto)
         bitmap = (imageView.drawable as BitmapDrawable).bitmap
+        originalBitmap = imageView.drawable.toBitmap()
+        sharpenedBitmap = Bitmap.createBitmap(originalBitmap.width, originalBitmap.height, originalBitmap.config)
 
     }
 
 
 }
-

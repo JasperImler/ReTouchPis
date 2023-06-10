@@ -15,5 +15,6 @@
     <color name="backDark">#1E1D1D</color>
     <color name="letterColor">#B1ED1D</color>
     <color name="TouMing">#00000000</color>
+    <color name="ripple_color">#054941</color>
 
 </resources>

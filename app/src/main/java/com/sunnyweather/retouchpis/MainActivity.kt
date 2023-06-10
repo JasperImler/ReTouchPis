@@ -149,4 +149,5 @@ class MainActivity : AppCompatActivity() {
        //使用registerForActivityResult启动
         takePhotoLaucher.launch(intent)
     }
+
 }
