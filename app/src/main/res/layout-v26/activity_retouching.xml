@@ -65,11 +65,12 @@
             android:visibility="invisible" />
 
         <SeekBar
-            android:id="@+id/seekBar_cpy"
+            android:id="@+id/seekBar_temperature"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:max="255"
+            android:max="100"
             android:min="0"
+            android:progress="50"
             android:thumb="@drawable/camerasdk_icon_seek_thumb"
             android:visibility="gone"/>
 
@@ -92,20 +93,20 @@
             android:thumb="@drawable/camerasdk_icon_seek_thumb"
             android:visibility="gone"/>
         <SeekBar
-            android:id="@+id/seekBar_noise"
+            android:id="@+id/seekBar_rotate"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:max="25"
+            android:max="360"
             android:min="0"
-            android:progress="12"
+            android:progress="180"
             android:thumb="@drawable/camerasdk_icon_seek_thumb"
             android:visibility="gone"/>
         <SeekBar
-            android:id="@+id/seekBar_ruihua"
+            android:id="@+id/seekBar_baoguang"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:max="255"
-            android:progress="127"
+            android:max="200"
+            android:progress="100"
             android:secondaryProgress="75"
             android:thumb="@drawable/camerasdk_icon_seek_thumb"
             android:visibility="gone"/>
@@ -139,30 +140,30 @@
                 android:textColor="@color/btn_text_color"
                 android:drawableTop="@drawable/btn_selector_light"/>
             <RadioButton
-                android:id="@+id/button_contrast"
+                android:id="@+id/button_tempera"
                 style="@style/camera_radio_button"
-                android:text="对比度"
+                android:text="色温"
                 android:textColor="@color/btn_text_color"
-                android:drawableTop="@drawable/btn_selector_cpy"
+                android:drawableTop="@drawable/btn_selector_temp"
                 android:layout_marginStart="50dip"/>
 
             <RadioButton
-                android:id="@+id/button_ruihua"
+                android:id="@+id/button_baoguang"
                 style="@style/camera_radio_button"
                 android:layout_marginStart="50dip"
                 android:drawableTop="@drawable/btn_selector_ruihua"
                 android:minWidth="48dp"
                 android:textColor="@color/btn_text_color"
-                android:text="锐化" />
+                android:text="曝光" />
 
             <RadioButton
-                android:id="@+id/button_noise"
+                android:id="@+id/button_rotate"
                 style="@style/camera_radio_button"
                 android:layout_marginStart="50dip"
                 android:drawableTop="@drawable/btn_selector_noise"
                 android:minWidth="48dp"
                 android:textColor="@color/btn_text_color"
-                android:text="颗粒" />
+                android:text="旋转" />
 
             <RadioButton
                 android:id="@+id/button_Hue"

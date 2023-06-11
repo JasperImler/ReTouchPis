@@ -49,7 +49,7 @@
             android:thumb="@drawable/camerasdk_icon_seek_thumb"/>
 
         <SeekBar
-            android:id="@+id/seekBar_cpy"
+            android:id="@+id/seekBar_temperature"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:max="255"
@@ -76,7 +76,7 @@
             android:thumb="@drawable/camerasdk_icon_seek_thumb"
             android:visibility="gone"/>
         <SeekBar
-            android:id="@+id/seekBar_noise"
+            android:id="@+id/seekBar_rotate"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:max="25"
@@ -85,7 +85,7 @@
             android:thumb="@drawable/camerasdk_icon_seek_thumb"
             android:visibility="gone"/>
         <SeekBar
-            android:id="@+id/seekBar_ruihua"
+            android:id="@+id/seekBar_baoguang"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:max="255"
@@ -123,15 +123,15 @@
                 android:textColor="@color/btn_text_color"
                 android:drawableTop="@drawable/btn_selector_light"/>
             <RadioButton
-                android:id="@+id/button_contrast"
+                android:id="@+id/button_tempera"
                 style="@style/camera_radio_button"
                 android:text="对比度"
                 android:textColor="@color/btn_text_color"
-                android:drawableTop="@drawable/btn_selector_cpy"
+                android:drawableTop="@drawable/btn_selector_temp"
                 android:layout_marginStart="50dip"/>
 
             <RadioButton
-                android:id="@+id/button_ruihua"
+                android:id="@+id/button_baoguang"
                 style="@style/camera_radio_button"
                 android:layout_marginStart="50dip"
                 android:drawableTop="@drawable/btn_selector_ruihua"
@@ -140,7 +140,7 @@
                 android:text="锐化" />
 
             <RadioButton
-                android:id="@+id/button_noise"
+                android:id="@+id/button_rotate"
                 style="@style/camera_radio_button"
                 android:layout_marginStart="50dip"
                 android:drawableTop="@drawable/btn_selector_noise"

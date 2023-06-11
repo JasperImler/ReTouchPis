@@ -26,7 +26,6 @@ class ImageHelper (){
                 // 亮度调节
                 matrix.setScale(value, value, value, 1f)
                 // 将矩阵合并到画笔的颜色过滤器中
-
             }
             "saturation" -> {
                 // 饱和度调节
@@ -42,36 +41,15 @@ class ImageHelper (){
                 // 将矩阵合并到画笔的颜色过滤器中
 
             }
-            "Contrast" -> {
-                val width = bitmap.width
-                val height = bitmap.height
-                val pixels = IntArray(width * height)
-                bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
-                val maxRGB = 255
-                val factor = maxRGB / ln(maxRGB.toDouble() + 1)
-                for (i in pixels.indices) {
-                    val color = pixels[i]
-                    val r = Color.red(color)
-                    val g = Color.green(color)
-                    val b = Color.blue(color)
-                    val logR = (factor * ln(r.toDouble() + 1) * value).toInt()
-                    val logG = (factor * ln(g.toDouble() + 1) * value).toInt()
-                    val logB = (factor * ln(b.toDouble() + 1) *
-                            value).toInt()
-                    pixels[i] = Color.rgb(
-                        min(logR, maxRGB),
-                        min(logG, maxRGB),
-                        min(logB, maxRGB)
-                    )
-                    bm.setPixels(pixels,0,width,0,0,width,height)
-                    return bm
-                }
-            }
             "ruihua" -> {
+                matrix.set(
+                    floatArrayOf(
+                        value / 100, 0f, 0f, 0f, 0f,
+                        0f, value/ 100, 0f, 0f, 0f,
+                        0f, 0f, value / 100, 0f, 0f,
+                        0f, 0f, 0f, 1f, 0f
+                    ))
 
-            }
-            "noise" ->{
-                paint.maskFilter = BlurMaskFilter(value,BlurMaskFilter.Blur.NORMAL)
             }
             "tou" ->{
                 paint.alpha = value.toInt()
@@ -84,5 +62,16 @@ class ImageHelper (){
         canvas.drawBitmap(bitmap, 0f, 0f, paint)
 
         return bm
+    }
+    private fun ColorMatrix.setTemperature(degrees: Float) {
+        val r = Math.cos(Math.toRadians(degrees.toDouble())) * 255
+        val b = Math.sin(Math.toRadians(degrees.toDouble())) * 255
+        val array = floatArrayOf(
+            r.toFloat() / 255, 0f, 0f, 0f, 0f,
+            0f, 1f, 0f, 0f, 0f,
+            0f, 0f, b.toFloat() / 255, 0f, 0f,
+            0f, 0f, 0f, 1f, 0f
+        )
+        set(array)
     }
 }

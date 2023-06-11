@@ -1,6 +1,7 @@
 package com.sunnyweather.retouchpis
 
 import android.Manifest
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
@@ -9,18 +10,12 @@ import android.os.*
 import android.provider.MediaStore
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.renderscript.Allocation
-import androidx.renderscript.RenderScript
-import androidx.renderscript.ScriptIntrinsicConvolve3x3
 import com.google.android.material.snackbar.Snackbar
 import com.sunnyweather.retouchpis.databinding.ActivityRetouchingBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class EditImageActivity : AppCompatActivity() {
@@ -44,7 +39,7 @@ class EditImageActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var originalBitmap: Bitmap
     private lateinit var sharpenedBitmap: Bitmap
-
+    private var IsSave:Int = 0
     companion object {
         const val REQUEST_WRITE_EXTERNAL_STORAGE_CODE = 1000
     }
@@ -80,7 +75,7 @@ class EditImageActivity : AppCompatActivity() {
 
     private fun saveImage() {
         val imageView = findViewById<ImageView>(R.id.retouchingphoto)
-
+        IsSave = 1
         // Start a new thread to load the animation and save the image
         Thread {
             // Load the animation
@@ -113,10 +108,26 @@ class EditImageActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> finish()
+            android.R.id.home -> Check()
             R.id.downloads -> DownloadsImage()
         }
         return true
+    }
+
+    private fun Check() {
+        if (IsSave==0)
+        {
+            //图片还未被保存    弹出提示框确认
+            val alertDialogBuilder = AlertDialog.Builder(this)
+            alertDialogBuilder.setMessage("图片还未保存，确定要离开吗？")
+                .setCancelable(false).setPositiveButton("确认",
+                    { dialog, id -> finish() })
+                .setNegativeButton("取消",
+                    { dialog, id -> dialog.cancel() })
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
+        }else
+            finish()
     }
 
     private fun Apply() {
@@ -166,7 +177,7 @@ class EditImageActivity : AppCompatActivity() {
                     seekBar_brightness.visibility=View.VISIBLE
                     showSeekbar(seekBar_brightness,"brightness")
                 }
-                R.id.button_ruihua ->  {
+                R.id.button_baoguang ->  {
                     if (lassSeekar!=null) {
                         lassSeekar!!.visibility = View.INVISIBLE
                     }
@@ -184,22 +195,22 @@ class EditImageActivity : AppCompatActivity() {
                     seekBar_Hue.visibility=View.VISIBLE
                     showSeekbar(seekBar_Hue,"Hue")
                 }
-                R.id.button_noise ->  {
+                R.id.button_rotate ->  {
                     if (lassSeekar!=null) {
                         lassSeekar!!.visibility = View.INVISIBLE
                     }
                     lassSeekar=seekBar_noise
                     seekBar_noise.visibility=View.VISIBLE
-                    seekBar_noise.max = 255
-                    showSeekbar(seekBar_noise,"noise")
+//                    showSeekbar(seekBar_noise,"noise")
+                    DoRotate(seekBar_noise)
                 }
-                R.id.button_contrast ->  {
+                R.id.button_tempera ->  {
                     if (lassSeekar!=null) {
                         lassSeekar!!.visibility = View.INVISIBLE
                     }
                     lassSeekar=seekBar_contrast
                     seekBar_contrast.visibility=View.VISIBLE
-                    showSeekbar(seekBar_contrast,"contrast")
+                    setTempertature(seekBar_contrast)
                 }
                 R.id.button_baohe -> {
                     if (lassSeekar!=null) {
@@ -221,6 +232,78 @@ class EditImageActivity : AppCompatActivity() {
         }
     }
 
+    private fun setTempertature(seekBar: SeekBar) {
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                handler.removeCallbacksAndMessages(null) // 移除之前的消
+                val value = progress - 50
+                handler.postDelayed({
+                    updateImage(value.toFloat()) // 延迟执行图片编辑操作
+                }, 100) // 延迟时间，单位为毫秒
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+    }
+
+    private fun updateImage(value: Float) {
+        val paint = Paint()
+        val mutableBitmap = Bitmap.createBitmap(originalBitmap.width, originalBitmap.height, Bitmap.Config.ARGB_8888)
+
+        val canvas = Canvas(mutableBitmap)
+        // Set up the ColorMatrix objects
+        val temperatureMatrix = ColorMatrix()
+        temperatureMatrix.setTemperature(value.toFloat())
+
+
+        // Combine the ColorMatrix objects
+        val colorMatrix = ColorMatrix()
+        colorMatrix.postConcat(temperatureMatrix)
+
+        // Apply the ColorMatrix to the Paint object
+        paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
+
+        // Draw the bitmap with the modified Paint object
+        canvas.drawBitmap(originalBitmap, 0f, 0f, paint)
+
+        // Update the ImageView
+        imageView.setImageBitmap(mutableBitmap)
+    }
+    private fun ColorMatrix.setTemperature(degrees: Float) {
+        val r = Math.cos(Math.toRadians(degrees.toDouble())) * 255
+        val b = Math.sin(Math.toRadians(degrees.toDouble())) * 255
+        val array = floatArrayOf(
+            r.toFloat() / 255, 0f, 0f, 0f, 0f,
+            0f, 1f, 0f, 0f, 0f,
+            0f, 0f, b.toFloat() / 255, 0f, 0f,
+            0f, 0f, 0f, 1f, 0f
+        )
+        set(array)
+    }
+
+
+
+    private fun DoRotate(seekbarNoise: SeekBar) {
+        seekbarNoise.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+//                handler.removeCallbacksAndMessages(null) // 移除之前的消
+                    imageView.rotation = progress.toFloat() // 延迟执行图片编辑操作
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+//                    Log.d("ReTouching","当前的值为${temp}")
+//                bitmap = (imageView.drawable as BitmapDrawable).bitmap
+            }
+        })
+    }
 
 
     private fun showSeekbar(seekBar:SeekBar,label:String)
@@ -232,8 +315,6 @@ class EditImageActivity : AppCompatActivity() {
                 val value = when (label) {
                     "brightness", "saturation" -> progress.toFloat() / 127
                     "Hue" -> (progress - 127) * 1.0F / 127 * 50
-                    "noise" -> progress.toFloat()
-                    "contrast" -> progress.toFloat()
                     else->progress.toFloat()
                 }
                 handler.postDelayed({
@@ -262,15 +343,15 @@ class EditImageActivity : AppCompatActivity() {
         /*初始化*/
 
         btn_bright = findViewById(R.id.button_brightness)
-        btn_cpy = findViewById(R.id.button_contrast)
-        btn_noise = findViewById(R.id.button_noise)
-        btn_ruihua = findViewById(R.id.button_ruihua)
+        btn_cpy = findViewById(R.id.button_tempera)
+        btn_noise = findViewById(R.id.button_rotate)
+        btn_ruihua = findViewById(R.id.button_baoguang)
         btn_Hue = findViewById(R.id.button_Hue)
         btn_tou = findViewById(R.id.button_tou)
         seekBar_brightness = findViewById(R.id.seekBar_bright)
-        seekBar_contrast = findViewById(R.id.seekBar_cpy)
-        seekBar_ruihua = findViewById(R.id.seekBar_ruihua)
-        seekBar_noise = findViewById(R.id.seekBar_noise)
+        seekBar_contrast = findViewById(R.id.seekBar_temperature)
+        seekBar_ruihua = findViewById(R.id.seekBar_baoguang)
+        seekBar_noise = findViewById(R.id.seekBar_rotate)
         seekBar_Hue = findViewById(R.id.seekBar_Hue)
         seekbar_baohe = findViewById(R.id.seekBar_baohe)
         seekBar_Tou = findViewById(R.id.seekBar_tou)
