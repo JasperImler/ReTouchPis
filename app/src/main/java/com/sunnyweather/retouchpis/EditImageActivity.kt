@@ -184,7 +184,7 @@ class EditImageActivity : AppCompatActivity() {
 
                     lassSeekar=seekBar_ruihua
                     seekBar_ruihua.visibility=View.VISIBLE
-                    showSeekbar(seekBar_ruihua,"ruihua")
+                    showSeekbar(seekBar_ruihua,"baoguang")
                 }
                 R.id.button_Hue ->  {
                     if (lassSeekar!=null) {
@@ -204,6 +204,7 @@ class EditImageActivity : AppCompatActivity() {
 //                    showSeekbar(seekBar_noise,"noise")
                     DoRotate(seekBar_noise)
                 }
+                //当点击到色温时
                 R.id.button_tempera ->  {
                     if (lassSeekar!=null) {
                         lassSeekar!!.visibility = View.INVISIBLE
@@ -259,11 +260,9 @@ class EditImageActivity : AppCompatActivity() {
         val temperatureMatrix = ColorMatrix()
         temperatureMatrix.setTemperature(value.toFloat())
 
-
         // Combine the ColorMatrix objects
         val colorMatrix = ColorMatrix()
         colorMatrix.postConcat(temperatureMatrix)
-
         // Apply the ColorMatrix to the Paint object
         paint.colorFilter = ColorMatrixColorFilter(colorMatrix)
 

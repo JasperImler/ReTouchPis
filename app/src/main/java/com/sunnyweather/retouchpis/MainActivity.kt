@@ -2,12 +2,16 @@ package com.sunnyweather.retouchpis
 
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var photoUri: Uri
     val REQUEST_PERMISSON_SORAGE = 1
     val REQUEST_PERMISSON_CAMERA = 2
-
+    var touchTimes:Int = 0
 
 
     private val takePhotoLaucher = registerForActivityResult(ActivityResultContracts.StartActivityForResult())
@@ -49,7 +53,40 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        binding.ugly!!.setOnClickListener {
+            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+            vibrator?.let {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    it.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+                } else {
+                    it.vibrate(100)
+                }
+            }
+            Toast.makeText(this, "你没看错，这只是张图片而已", Toast.LENGTH_SHORT).show()
+        }
+        binding.retouchingPis!!.setOnClickListener {
+            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+            vibrator?.let {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    it.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+                } else {
+                    it.vibrate(100)
+                }
+            }
+            if (touchTimes==0)
+            {
+                Toast.makeText(this, "不要再摸啦！", Toast.LENGTH_SHORT).show()
+                touchTimes++
+            }else if (touchTimes in 1..5)
+            {
+                Toast.makeText(this, "你再摸？你还有${5-touchTimes}次机会", Toast.LENGTH_SHORT).show()
+                touchTimes++
+            }else if (touchTimes == 6)
+            {
+                Toast.makeText(this, "哈 哈", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
         binding.fromalbum.setOnClickListener {
             openAblumWithPermissionsCheck()
         }

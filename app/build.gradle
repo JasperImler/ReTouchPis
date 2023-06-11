@@ -9,6 +9,8 @@ android {
     viewBinding{
         enabled = true
     }
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
 
 
     defaultConfig {

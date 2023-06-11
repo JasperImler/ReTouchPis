@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="?android:attr/colorBackground">
+    android:background="?android:attr/colorBackground"
+    tools:context=".MainActivity">
 
 
     <Button
@@ -20,17 +20,13 @@
         android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.311" />
+        tools:layout_editor_absoluteX="76dp"
+        tools:layout_editor_absoluteY="210dp" />
+
     <Button
         android:id="@+id/take_photo"
-        android:layout_width="258dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="305dp"
+        android:layout_width="243dp"
+        android:layout_height="83dp"
         android:background="@drawable/btn_bg"
         android:foreground="?selectableItemBackground"
         android:rotationX="2"
@@ -38,10 +34,8 @@
         android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fromalbum" />
+        tools:layout_editor_absoluteX="77dp"
+        tools:layout_editor_absoluteY="343dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

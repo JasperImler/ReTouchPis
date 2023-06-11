@@ -31,7 +31,6 @@ class ImageHelper (){
                 // 饱和度调节
                 matrix.setSaturation(value)
                 // 将矩阵合并到画笔的颜色过滤器中
-
             }
             "Hue" -> {
                 // 色相调节
@@ -39,9 +38,8 @@ class ImageHelper (){
                 matrix.setRotate(1, value)
                 matrix.setRotate(2, value)
                 // 将矩阵合并到画笔的颜色过滤器中
-
             }
-            "ruihua" -> {
+            "baoguang" -> {
                 matrix.set(
                     floatArrayOf(
                         value / 100, 0f, 0f, 0f, 0f,
